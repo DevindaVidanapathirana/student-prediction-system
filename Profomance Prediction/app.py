@@ -7,6 +7,7 @@ import joblib
 import pandas as pd
 from pathlib import Path
 
+
 # Initialize FastAPI app
 app = FastAPI(
     title="Student Performance Prediction API",
