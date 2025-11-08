@@ -26,6 +26,7 @@ app.add_middleware(
 )
 
 # Load trained model and scaler.
+
 try:
     lr_model = joblib.load("performance_linear_regression.pkl")
     perf_scaler = joblib.load("performance_scaler.pkl")
