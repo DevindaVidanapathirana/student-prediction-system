@@ -25,7 +25,7 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# Load trained model and scaler.
+# Load trained model and scaler
 
 try:
     lr_model = joblib.load("performance_linear_regression.pkl")
