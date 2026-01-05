@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Student Engagement API Tester</title>
+  <style>
+    body { font-family: Arial, sans-serif; margin: 24px; background: #f5f7fb; color: #1f2d3d; }
+    h1 { margin-top: 0; }
+    label { display: block; margin: 8px 0 4px; }
+    input { width: 220px; padding: 6px; }
+    button { margin-top: 14px; padding: 10px 16px; cursor: pointer; }
+    .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 12px; }
+    pre { background: #0f172a; color: #e2e8f0; padding: 12px; border-radius: 6px; overflow-x: auto; }
+    .card { background: #fff; padding: 16px; border-radius: 8px; box-shadow: 0 3px 8px rgba(0,0,0,0.08); }
+  </style>
+</head>
+<body>
+  <h1>Student Engagement API Tester</h1>
+  <div class="card">
+    <div class="grid">
+      <div>
+        <label for="login_frequency">Login Frequency</label>
+        <input id="login_frequency" type="number" step="0.1" value="6">
+      </div>
+      <div>
+        <label for="session_duration">Session Duration</label>
+        <input id="session_duration" type="number" step="0.1" value="75">
+      </div>
+      <div>
+        <label for="forum_participation">Forum Participation</label>
+        <input id="forum_participation" type="number" step="0.1" value="8">
+      </div>
+      <div>
+        <label for="assignment_access">Assignment Access</label>
+        <input id="assignment_access" type="number" step="0.1" value="9">
+      </div>
+      <div>
+        <label for="time_gap_avg">Time Gap Avg</label>
+        <input id="time_gap_avg" type="number" step="0.1" value="1.2">
+      </div>
+      <div>
+        <label for="inactivity_days">Inactivity Days</label>
+        <input id="inactivity_days" type="number" step="0.1" value="1">
+      </div>
+    </div>
+    <button onclick="callApi('predict')">/predict (persona + score)</button>
+    <button onclick="callApi('persona')">/persona only</button>
+    <button onclick="callApi('score')">/score only</button>
+  </div>
+  <h3>Response</h3>
+  <pre id="output">Click a button to call the API.</pre>
+
+  <script>
+    const apiBase = "http://127.0.0.1:8000";
+
+    function payload() {
+      return {
+        login_frequency: parseFloat(document.getElementById("login_frequency").value),
+        session_duration: parseFloat(document.getElementById("session_duration").value),
+        forum_participation: parseFloat(document.getElementById("forum_participation").value),
+        assignment_access: parseFloat(document.getElementById("assignment_access").value),
+        time_gap_avg: parseFloat(document.getElementById("time_gap_avg").value),
+        inactivity_days: parseFloat(document.getElementById("inactivity_days").value)
+      };
+    }
+
+    async function callApi(route) {
+      const out = document.getElementById("output");
+      out.textContent = "Loading...";
+      try {
+        const res = await fetch(`${apiBase}/${route}`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(payload())
+        });
+        const data = await res.json();
+        out.textContent = JSON.stringify(data, null, 2);
+      } catch (err) {
+        out.textContent = `Error: ${err}`;
+      }
+    }
+  </script>
+</body>
+</html>
